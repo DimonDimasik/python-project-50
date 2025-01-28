@@ -1,7 +1,7 @@
 
 <div style="display: flex; justify-content: space-between;">
 
-<a href="https://codeclimate.com/github/DimonDimasik/python-project-50/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4f22b711b4f8a355fcf6/test_coverage" /></a>
+[![Maintainability](https://api.codeclimate.com/v1/badges/4f22b711b4f8a355fcf6/maintainability)](https://codeclimate.com/github/DimonDimasik/python-project-50/maintainability)
 
 
 <a href="https://codeclimate.com/github/DimonDimasik/python-project-50/maintainability"><img src="https://api.codeclimate.com/v1/badges/4f22b711b4f8a355fcf6/maintainability" /></a>
