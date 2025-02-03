@@ -3,7 +3,7 @@ from gendiff.modules.generate_diff import assort, convert, generate_diff
 
 
 def test_assort():
-    assert assort([('+', 'c', '-'),('z,' 'a', 'b'), ('1', 'b', '9')]) == [('z', 'a', 'b'), ('1', 'b', '9'), ('+', 'c', '-')]
+    assert assort([('+', 'c', '-'),('z', 'a', 'b'), ('1', 'b', '9')]) == [('z', 'a', 'b'), ('1', 'b', '9'), ('+', 'c', '-')]
 
 
 def test_convert():
