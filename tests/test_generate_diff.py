@@ -19,12 +19,5 @@ def json_file2():
     return 'tests/fixtures/file2.json'
 
 def test_generate_diff(json_file1, json_file2):
-    expected = (
-        r'- follow: false\n'
-        r'  host: hexlet.io\n'
-        r'- proxy: 123.234.53.22\n'
-        r'- timeout: 50\n'
-        r'+ timeout: 20\n'
-        r'+ verbose: true'
-    )
+    expected = '- follow: false\n  host: hexlet.io\n- proxy: 123.234.53.22\n- timeout: 50\n+ timeout: 20\n+ verbose: true'
     assert generate_diff(json_file1, json_file2) == expected
