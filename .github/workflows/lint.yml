@@ -30,7 +30,7 @@ jobs:
       - name: Run tests with coverage
         run: |
              make test
-             make coverage
+             coverage xml
 
       - name: Upload coverage to CodeClimate
         env:
