@@ -20,4 +20,4 @@ test:
 	poetry run pytest --cov=tests --cov-report=xml
 
 coverage:
-    pytest --cov=gendiff --cov-report=term-missing tests/
+	pytest --cov=gendiff --cov-report=term-missing tests/
