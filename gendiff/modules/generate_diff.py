@@ -9,10 +9,10 @@ def convert(iter):
     string = ''
     for i in iter:
         string += i[0] + i[1] + i[2]
-    return string[:-2]
+    return string[:-1]
 
 
-def collate(first, second):
+def compare(first, second):
     compare_list = []
     for item in first:
         if item in second:
@@ -42,6 +42,6 @@ def collate(first, second):
 def generate_diff(first_file, second_file):
     first_file = json.load(open(first_file))
     second_file = json.load(open(second_file))
-    diff_list = collate(first_file, second_file)
+    diff_list = compare(first_file, second_file)
     diff_list = assort(diff_list)
-    print(convert(diff_list))
+    return convert(diff_list)
