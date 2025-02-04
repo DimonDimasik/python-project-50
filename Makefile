@@ -21,4 +21,3 @@ test:
 
 coverage:
 	poetry run pytest --cov=gendiff --cov-report=term-missing tests/
-
