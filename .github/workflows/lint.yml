@@ -28,9 +28,7 @@ jobs:
         run: poetry install
 
       - name: Run tests with coverage
-        run: |
-             make test
-             make coverage
+        run: make test
 
       - name: Upload coverage to CodeClimate
         env:
