@@ -1,4 +1,4 @@
-import json
+import json, yaml
 
 
 def assort(iter):
@@ -39,9 +39,16 @@ def compare(first, second):
     return compare_list
 
 
+def open_file(file_name):
+    if file_name.endswith('json'):
+        return json.load(open(file_name))
+    elif file_name.endswith('yaml') or file_name.endswith('yml'):
+        return yaml.load(open(file_name), Loader=yaml.FullLoader)
+
+
 def generate_diff(first_file, second_file):
-    first_file = json.load(open(first_file))
-    second_file = json.load(open(second_file))
+    first_file = open_file(first_file)
+    second_file = open_file(second_file)
     diff_list = compare(first_file, second_file)
     diff_list = assort(diff_list)
     return convert(diff_list)
