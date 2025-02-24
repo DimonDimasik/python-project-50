@@ -2,7 +2,7 @@ import json
 import yaml
 
 
-def assort(iter):
+def key_sort(iter):
     return sorted(iter, key=lambda item: item[1])
 
 
@@ -51,5 +51,5 @@ def generate_diff(first_file, second_file):
     first_file = open_file(first_file)
     second_file = open_file(second_file)
     diff_list = compare(first_file, second_file)
-    diff_list = assort(diff_list)
+    diff_list = key_sort(diff_list)
     return convert(diff_list)
