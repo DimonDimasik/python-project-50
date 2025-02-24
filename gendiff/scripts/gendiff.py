@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import argparse
 from gendiff.modules.parser import parse
 
 
