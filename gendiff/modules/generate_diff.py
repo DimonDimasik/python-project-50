@@ -13,30 +13,24 @@ def convert(iter):
     return string[:-1]
 
 
+def show_diff(symbol, key, value):
+    return (symbol, f'{key}: '.lower(), f'{value}\n'.lower())
+
+
 def compare(first, second):
     compare_list = []
     for item in first:
         if item in second:
             if first[item] == second[item]:
-                compare_list.append(
-                    ('  ', f'{item}: '.lower(), f'{first[item]}\n'.lower())
-                )
+                compare_list.append(show_diff('  ', item, first[item]))
             else:
-                compare_list.append(
-                    ('- ', f'{item}: '.lower(), f'{first[item]}\n'.lower())
-                )
-                compare_list.append(
-                    ('+ ', f'{item}: '.lower(), f'{second[item]}\n'.lower())
-                )
+                compare_list.append(show_diff('- ', item, first[item]))
+                compare_list.append(show_diff('+ ', item, second[item]))
         else:
-            compare_list.append(
-                ('- ', f'{item}: '.lower(), f'{first[item]}\n'.lower())
-            )
+            compare_list.append(show_diff('- ', item, first[item]))
     for item in second:
         if item not in first:
-            compare_list.append(
-                ('+ ', f'{item}: '.lower(), f'{second[item]}\n'.lower())
-            )
+            compare_list.append(show_diff('+ ', item, second[item]))
     return compare_list
 
 
