@@ -2,36 +2,78 @@ import json
 import yaml
 
 
-def key_sort(iter):
-    return sorted(iter, key=lambda item: item[1])
+def format_diff(key, value, symbol=''):
+    if not isinstance(value, dict):
+        return f'{symbol}{key}: {value}'.lower()
+    else:
+        result = []
+        result.append(f'{key}: {{')
+        for k, v in value.items():
+            result.append(format_diff(k, v))
+        result.append('}')
+    return '\n'.join(result)
+    
 
 
-def convert(iter):
-    string = ''
-    for i in iter:
-        string += i[0] + i[1] + i[2]
-    return string[:-1]
+def key_sort(dict_1, dict_2):
+    keys = sorted(set(dict_1.keys()) | set(dict_2.keys()))
+    return keys
 
 
-def show_diff(symbol, key, value):
-    return (symbol, f'{key}: '.lower(), f'{value}\n'.lower())
-
-
-def compare(first, second):
-    compare_list = []
-    for item in first:
-        if item in second:
-            if first[item] == second[item]:
-                compare_list.append(show_diff('  ', item, first[item]))
-            else:
-                compare_list.append(show_diff('- ', item, first[item]))
-                compare_list.append(show_diff('+ ', item, second[item]))
+def format_string(diff_str):
+    lines = diff_str.split('\n')
+    formatted_lines = []
+    current_indent = 0
+    
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            continue
+        
+        if stripped.endswith('{'):
+            formatted_lines.append(' ' * current_indent + stripped)
+            current_indent += 4
+        elif stripped == '}':
+            current_indent -= 4
+            formatted_lines.append(' ' * current_indent + stripped)
         else:
-            compare_list.append(show_diff('- ', item, first[item]))
-    for item in second:
-        if item not in first:
-            compare_list.append(show_diff('+ ', item, second[item]))
-    return compare_list
+            if stripped.startswith(('+ ', '- ', '  ')):
+                formatted_lines.append(' ' * (current_indent - 2) + stripped)
+            else:
+                formatted_lines.append(' ' * current_indent + stripped)
+    
+    return '\n'.join(formatted_lines)
+
+
+
+
+def build_diff(first_dict, second_dict):
+    
+
+    def inner(first, second):
+        lines = []
+        key_list = key_sort(first, second)
+        for item in key_list:
+            if item in first and item not in second:
+                lines.append(format_diff(item, first[item], '- '))
+            if item in second and item not in first:
+                lines.append(format_diff(item, second[item], '+ '))
+            if item in first and item in second:
+                if not isinstance(first[item], dict) or not isinstance(second[item], dict):
+                    if first[item] == second[item]:
+                        lines.append(format_diff(item, first[item], '  '))
+                    else:
+                        lines.append(format_diff(item, first[item], '- '))
+                        lines.append(format_diff(item, second[item], '+ '))
+                else:
+                    lines.append(format_diff(item, '{', '  '))
+                    nested = inner(first[item], second[item])
+                    if nested:
+                        lines.append(nested)
+                    lines.append('}')
+        return '\n'.join(lines)
+    result = inner(first_dict, second_dict)
+    return f'{{\n{result}\n}}'
 
 
 def open_file(file_name):
@@ -44,6 +86,5 @@ def open_file(file_name):
 def generate_diff(first_file, second_file):
     first_file = open_file(first_file)
     second_file = open_file(second_file)
-    diff_list = compare(first_file, second_file)
-    diff_list = key_sort(diff_list)
-    return convert(diff_list)
+    diff = build_diff(first_file, second_file)
+    return format_string(diff)
