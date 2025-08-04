@@ -16,8 +16,7 @@ def format_value(value):
 
 
 def format_nested_dict(data):
-    """Converts a dictionary, including nested dictionaries, 
-    to a string of the required format"""
+    """Converts a dictionary, including nested dictionaries, to a string"""
     lines = []
     for k, v in data.items():
         if not isinstance(v, dict):
@@ -103,7 +102,7 @@ def format_string(diff_str):
             stripped = stripped + ' '
         if not stripped:
             continue
-        
+
         if stripped.endswith('{') and not stripped.startswith(('+ ', '- ', '  ')):
             formatted_lines.append(' ' * current_indent + stripped)
             current_indent += 4
@@ -123,6 +122,7 @@ def format_string(diff_str):
 
 
 def open_file(file_name):
+    """Opens json and yaml files"""
     if file_name.endswith('json'):
         return json.load(open(file_name))
     elif file_name.endswith('yaml') or file_name.endswith('yml'):
@@ -130,6 +130,7 @@ def open_file(file_name):
 
 
 def generate_diff(first_file, second_file):
+    """Creates a diff between two files"""
     first_file = open_file(first_file)
     second_file = open_file(second_file)
     diff = build_diff(first_file, second_file)
