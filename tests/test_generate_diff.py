@@ -1,13 +1,6 @@
 import pytest
-from gendiff.modules.generate_diff import key_sort, convert, generate_diff
+from gendiff.modules.generate_diff import key_sort, generate_diff
 
-
-def test_key_sort():
-    assert key_sort([('+', 'c', '-'),('z', 'a', 'b'), ('1', 'b', '9')]) == [('z', 'a', 'b'), ('1', 'b', '9'), ('+', 'c', '-')]
-
-
-def test_convert():
-    assert convert([('he', 'll', 'o, '), ('wo', 'rl', 'd!!')]) == 'hello, world!'
 
 @pytest.fixture
 def json_file1():
@@ -25,12 +18,12 @@ def json_empty():
 
 
 def test_json_generate_diff(json_file1, json_file2):
-    expected = '- follow: false\n  host: hexlet.io\n- proxy: 123.234.53.22\n- timeout: 50\n+ timeout: 20\n+ verbose: true'
+    expected = '{\n  - follow: false\n    host: hexlet.io\n  - proxy: 123.234.53.22\n  - timeout: 50\n  + timeout: 20\n  + verbose: true\n}'
     assert generate_diff(json_file1, json_file2) == expected
 
 
 def test_empty_json_generate_diff(json_empty, json_file2):
-    expected = '+ host: hexlet.io\n+ timeout: 20\n+ verbose: true'
+    expected = '{\n  + host: hexlet.io\n  + timeout: 20\n  + verbose: true\n}'
     assert generate_diff(json_empty, json_file2) == expected
 
 
@@ -50,10 +43,25 @@ def yaml_empty():
 
 
 def test_yaml_generate_diff(yaml_file1, yaml_file2):
-    expected = '- follow: false\n  host: hexlet.io\n- proxy: 123.234.53.22\n- timeout: 50\n+ timeout: 20\n+ verbose: true'
+    expected = '{\n  - follow: false\n    host: hexlet.io\n  - proxy: 123.234.53.22\n  - timeout: 50\n  + timeout: 20\n  + verbose: true\n}'
     assert generate_diff(yaml_file1, yaml_file2) == expected
 
 
 def test_empty_yaml_generate_diff(yaml_file1, yaml_empty):
-    expected = '- follow: false\n- host: hexlet.io\n- proxy: 123.234.53.22\n- timeout: 50'
+    expected = '{\n  - follow: false\n  - host: hexlet.io\n  - proxy: 123.234.53.22\n  - timeout: 50\n}'
     assert generate_diff(yaml_file1, yaml_empty) == expected
+
+
+def test_json_generate_diff_nested(json_file21, json_file22):
+    expected = '{\n    common: {\n      + follow: false\n        setting1: Value 1\n      - setting2: 200\n      - setting3: true\n      + setting3: null\n      + setting4: blah blah\n      + setting5: {\n            key5: value5\n        }\n        setting6: {\n            doge: {\n              - wow: \n              + wow: so much\n            }\n            key: value\n          + ops: vops\n        }\n    }\n    group1: {\n      - baz: bas\n      + baz: bars\n        foo: bar\n      - nest: {\n            key: value\n        }\n      + nest: str\n    }\n  - group2: {\n        abc: 12345\n        deep: {\n            id: 45\n        }\n    }\n  + group3: {\n        deep: {\n            id: {\n                number: 45\n            }\n        }\n        fee: 100500\n    }\n}'
+    assert generate_diff(json_file21, json_file22) == expected
+
+
+@pytest.fixture
+def json_file21():
+    return 'tests/fixtures/file21.json'
+
+
+@pytest.fixture
+def json_file22():
+    return 'tests/fixtures/file22.json'
