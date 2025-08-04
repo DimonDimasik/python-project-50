@@ -16,7 +16,8 @@ def format_value(value):
 
 
 def format_nested_dict(data):
-    """Converts a dictionary, including nested dictionaries, to a string of the required format"""
+    """Converts a dictionary, including nested dictionaries, 
+    to a string of the required format"""
     lines = []
     for k, v in data.items():
         if not isinstance(v, dict):
@@ -38,7 +39,7 @@ def format_diff(key, value, symbol=''):
         for k, v in value.items():
             result.append(format_diff(k, v))
         result.append('}')
-    return '\n'.join(result) 
+    return '\n'.join(result)
 
 
 def key_sort(dict_1, dict_2):
@@ -95,7 +96,7 @@ def format_string(diff_str):
     lines = diff_str.split('\n')
     formatted_lines = []
     current_indent = 0
-    
+
     for line in lines:
         stripped = line.strip()
         if stripped.endswith(':'):
@@ -117,7 +118,7 @@ def format_string(diff_str):
                 formatted_lines.append(' ' * (current_indent - 2) + stripped)
             else:
                 formatted_lines.append(' ' * current_indent + stripped)
-    
+
     return '\n'.join(formatted_lines)
 
 
