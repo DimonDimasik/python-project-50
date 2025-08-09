@@ -1,5 +1,5 @@
 import pytest
-from gendiff.modules.generate_diff import key_sort, generate_diff
+from gendiff.modules.generate_diff import generate_diff
 
 
 @pytest.fixture

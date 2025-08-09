@@ -17,7 +17,7 @@ def format_value(value):
 
 def format_dict(data):
     """
-    Converts a dictionary, including nested dictionaries, 
+    Converts a dictionary, including nested dictionaries,
     to a string of the required format
     """
     lines = []
@@ -46,7 +46,7 @@ def format_diff(key, value, symbol=''):
         for k, v in value.items():
             result.append(format_diff(k, v))
         result.append('}')
-    return '\n'.join(result) 
+    return '\n'.join(result)
 
 
 def build_diff(first_dict, second_dict):
@@ -100,7 +100,7 @@ def format_string(diff_str):
     formatted_lines = []
     current_indent = 0
     symbols = ('+ ', '- ', '  ')
-    
+
     for line in lines:
         stripped = line.strip()
         if stripped.endswith(':'):
@@ -119,7 +119,7 @@ def format_string(diff_str):
                 formatted_lines.append(' ' * (current_indent - 2) + stripped)
             else:
                 formatted_lines.append(' ' * current_indent + stripped)
-    
+
     return '\n'.join(formatted_lines)
 
 
