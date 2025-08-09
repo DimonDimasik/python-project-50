@@ -15,22 +15,30 @@ def format_value(value):
     return str(value)
 
 
-def format_nested_dict(data):
-    """Converts a dictionary, including nested dictionaries, to a string"""
+def format_dict(data):
+    """
+    Converts a dictionary, including nested dictionaries, 
+    to a string of the required format
+    """
     lines = []
     for k, v in data.items():
         if not isinstance(v, dict):
             lines.append(f'{format_value(k)}: {format_value(v)}')
         else:
             lines.append(f'{format_value(k)}: {{')
-            lines.append(f'{format_nested_dict(v)}')
+            lines.append(f'{format_dict(v)}')
             lines.append('}')
     return '\n'.join(lines)
 
 
+def is_dict(value):
+    """Checks if a value is a dictionary"""
+    return True if isinstance(value, dict) else False
+
+
 def format_diff(key, value, symbol=''):
     """Creates a visual display of the diff"""
-    if not isinstance(value, dict):
+    if not is_dict(value):
         return f'{symbol}{format_value(key)}: {format_value(value)}'
     else:
         result = []
@@ -38,13 +46,7 @@ def format_diff(key, value, symbol=''):
         for k, v in value.items():
             result.append(format_diff(k, v))
         result.append('}')
-    return '\n'.join(result)
-
-
-def key_sort(dict_1, dict_2):
-    """Merges and sorts dictionary keys"""
-    keys = sorted(set(dict_1.keys()) | set(dict_2.keys()))
-    return keys
+    return '\n'.join(result) 
 
 
 def build_diff(first_dict, second_dict):
@@ -52,27 +54,29 @@ def build_diff(first_dict, second_dict):
 
     def inner(first, second):
         lines = []
-        key_list = key_sort(first, second)
-        for item in key_list:
+        keys = sorted(set(first.keys()) | set(second.keys()))
+        first_set = set(first.keys()) - set(second.keys())
+        second_set = set(second.keys()) - set(first.keys())
+        intersection = set(first.keys()) & set(second.keys())
+        for item in keys:
 
-            if item in first and item not in second:
-                if not isinstance(first[item], dict):
+            if item in first_set:
+                if not is_dict(first[item]):
                     lines.append(format_diff(item, first[item], '- '))
                 else:
                     lines.append(f'- {item}: {{')
-                    lines.append(format_nested_dict(first[item]))
+                    lines.append(format_dict(first[item]))
                     lines.append('}')
-
-            if item in second and item not in first:
-                if not isinstance(second[item], dict):
+            if item in second_set:
+                if not is_dict(second[item]):
                     lines.append(format_diff(item, second[item], '+ '))
                 else:
                     lines.append(f'+ {item}: {{')
-                    lines.append(format_nested_dict(second[item]))
+                    lines.append(format_dict(second[item]))
                     lines.append('}')
 
-            if item in first and item in second:
-                if not isinstance(first[item], dict) or not isinstance(second[item], dict):
+            if item in intersection:
+                if not is_dict(first[item]) or not is_dict(second[item]):
                     if first[item] == second[item]:
                         lines.append(format_diff(item, first[item], '  '))
                     else:
@@ -95,29 +99,27 @@ def format_string(diff_str):
     lines = diff_str.split('\n')
     formatted_lines = []
     current_indent = 0
-
+    symbols = ('+ ', '- ', '  ')
+    
     for line in lines:
         stripped = line.strip()
         if stripped.endswith(':'):
             stripped = stripped + ' '
-        if not stripped:
-            continue
-
-        if stripped.endswith('{') and not stripped.startswith(('+ ', '- ', '  ')):
+        if stripped.endswith('{') and not stripped.startswith(symbols):
             formatted_lines.append(' ' * current_indent + stripped)
             current_indent += 4
-        elif stripped.endswith('{') and stripped.startswith(('+ ', '- ', '  ')):
+        elif stripped.endswith('{') and stripped.startswith(symbols):
             formatted_lines.append(' ' * (current_indent - 2) + stripped)
             current_indent += 4
         elif stripped == '}':
             current_indent -= 4
             formatted_lines.append(' ' * current_indent + stripped)
         else:
-            if stripped.startswith(('+ ', '- ', '  ')):
+            if stripped.startswith(symbols):
                 formatted_lines.append(' ' * (current_indent - 2) + stripped)
             else:
                 formatted_lines.append(' ' * current_indent + stripped)
-
+    
     return '\n'.join(formatted_lines)
 
 
