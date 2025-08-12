@@ -93,7 +93,7 @@ def build_diff(first_dict, second_dict):
     return f'{{\n{result}\n}}'
 
 
-def format_string(diff_str):
+def stylish(diff_str):
     """Adds indentation to the diff line"""
 
     lines = diff_str.split('\n')
@@ -131,9 +131,10 @@ def open_file(file_name):
         return yaml.load(open(file_name), Loader=yaml.FullLoader)
 
 
-def generate_diff(first_file, second_file):
+def generate_diff(first_file, second_file, format_name='stylish'):
     """Creates a diff between two files"""
     first_file = open_file(first_file)
     second_file = open_file(second_file)
+    formater = globals().get(format_name)
     diff = build_diff(first_file, second_file)
-    return format_string(diff)
+    return formater(diff)
