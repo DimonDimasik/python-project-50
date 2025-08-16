@@ -20,4 +20,4 @@
 [![asciicast](https://asciinema.org/a/WvsZrGC05IJkOBMlvhal6GH3T.svg)](https://asciinema.org/a/WvsZrGC05IJkOBMlvhal6GH3T)
 
 ### Example of gendiff with nested structures(yaml):
-[![asciicast](https://asciinema.org/a/p7R6KKhllxpuRX88SoJHoENGO.svg)] (https://asciinema.org/a/p7R6KKhllxpuRX88SoJHoENGO)
+[![asciicast](https://asciinema.org/a/p7R6KKhllxpuRX88SoJHoENGO.svg)](https://asciinema.org/a/p7R6KKhllxpuRX88SoJHoENGO)
