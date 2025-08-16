@@ -14,7 +14,10 @@
 [![Actions Status](https://github.com/DimonDimasik/python-project-50/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/DimonDimasik/python-project-50/actions)
 
 ### Example of gendiff (json):
-[![asciicast](https://asciinema.org/a/kb7we7T6f1kKMGpW4qIjHDnrV.svg)](https://asciinema.org/a/kb7we7T6f1kKMGpW4qIjHDnrV)
+[![asciicast](https://asciinema.org/a/RuSg4K1nqHjojE4RdJHIoA4p0.svg)](https://asciinema.org/a/RuSg4K1nqHjojE4RdJHIoA4p0)
 
 ### Example of gendiff (yaml):
-[![asciicast](https://asciinema.org/a/BzkFMNp6JcYcNicBMAsku8j20.svg)](https://asciinema.org/a/BzkFMNp6JcYcNicBMAsku8j20)
+[![asciicast](https://asciinema.org/a/WvsZrGC05IJkOBMlvhal6GH3T.svg)](https://asciinema.org/a/WvsZrGC05IJkOBMlvhal6GH3T)
+
+### Example of gendiff with nested structures(yaml):
+[![asciicast](https://asciinema.org/a/p7R6KKhllxpuRX88SoJHoENGO.svg)] (https://asciinema.org/a/p7R6KKhllxpuRX88SoJHoENGO)
