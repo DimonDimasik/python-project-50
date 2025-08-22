@@ -1,6 +1,7 @@
 import json
 import yaml
-
+from gendiff.modules.stylish import stylish
+from gendiff.modules.plain import plain
 
 def format_value(value):
     """Converts a value to a string of the required format"""
@@ -91,36 +92,6 @@ def build_diff(first_dict, second_dict):
         return '\n'.join(lines)
     result = inner(first_dict, second_dict)
     return f'{{\n{result}\n}}'
-
-
-def stylish(diff_str):
-    """Adds indentation to the diff line"""
-
-    lines = diff_str.split('\n')
-    formatted_lines = []
-    current_indent = 0
-    symbols = ('+ ', '- ', '  ')
-
-    for line in lines:
-        stripped = line.strip()
-        if stripped.endswith(':'):
-            stripped = stripped + ' '
-        if stripped.endswith('{') and not stripped.startswith(symbols):
-            formatted_lines.append(' ' * current_indent + stripped)
-            current_indent += 4
-        elif stripped.endswith('{') and stripped.startswith(symbols):
-            formatted_lines.append(' ' * (current_indent - 2) + stripped)
-            current_indent += 4
-        elif stripped == '}':
-            current_indent -= 4
-            formatted_lines.append(' ' * current_indent + stripped)
-        else:
-            if stripped.startswith(symbols):
-                formatted_lines.append(' ' * (current_indent - 2) + stripped)
-            else:
-                formatted_lines.append(' ' * current_indent + stripped)
-
-    return '\n'.join(formatted_lines)
 
 
 def open_file(file_name):
