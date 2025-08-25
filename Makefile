@@ -1,23 +1,20 @@
 install:
-	poetry install
-
-gendiff:
-	poetry run gendiff tests/fixtures/file1.json tests/fixtures/file2.json
+	uv pip install -r requirements.txt
 
 build:
-	poetry build
+	uv build
 
 publish:
-	poetry publish --dry-run
+	uv publish --dry-run
 
-package-install:
+package-install: build
 	python3 -m pip install --user dist/*.whl
 
-lint:
-	poetry run flake8 gendiff
+lint: dev-install
+	uv run flake8 gendiff
 
-test:
-	poetry run pytest --cov=gendiff --cov-report=xml tests/
+test: dev-install
+	uv run pytest --cov=gendiff --cov-report=xml tests/
 
-coverage:
-	poetry run pytest --cov=gendiff --cov-report=term-missing tests/
+coverage: dev-install
+	uv run pytest --cov=gendiff --cov-report=term-missing tests/
