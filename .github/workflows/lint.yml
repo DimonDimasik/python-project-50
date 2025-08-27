@@ -21,10 +21,10 @@ jobs:
           cache-dependency-glob: 'pyproject.toml'
 
       - name: Install dependencies
-        run: uv pip install -e ".[dev]"
+        run: uv pip install --system -e ".[dev]"
 
       - name: Run linting
-        run: uv run make lint
+        run: uv run flake8 gendiff
 
   test:
     name: Testing and SonarCloud Analysis
