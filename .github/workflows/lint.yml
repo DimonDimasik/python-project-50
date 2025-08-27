@@ -45,7 +45,7 @@ jobs:
         run: uv sync --dev --frozen
 
       - name: Run tests with coverage
-        run: uv run make test
+        run: uv run pytest --cov=gendiff --cov-report=xml tests/
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1.9.1
