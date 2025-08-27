@@ -1,41 +1,59 @@
 name: lint and test
 
-on: push
+on:
+  - push
+  - pull_request
 
 jobs:
-  build:
+  lint:
+    name: Linting
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Install poetry
-        run: curl -sSL https://install.python-poetry.org | python3 -
+      - name: Setup UV
+        uses: astral-sh/setup-uv@v2
+        with:
+          enable-cache: true
+          cache-dependency-glob: 'pyproject.toml'
 
-      - name: Setup poetry
-        run: poetry install
+      - name: Install dependencies
+        run: uv pip install -e ".[dev]"
 
-      - run: make lint
+      - name: Run linting
+        run: uv run make lint
 
   test:
+    name: Testing and SonarCloud Analysis
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Install poetry
-        run: curl -sSL https://install.python-poetry.org | python3 -
+      - name: Setup UV
+        uses: astral-sh/setup-uv@v2
+        with:
+          enable-cache: true
+          cache-dependency-glob: 'pyproject.toml'
 
-      - name: Setup poetry
-        run: poetry install
+      - name: Install dependencies
+        run: uv pip install -e ".[dev]"
 
       - name: Run tests with coverage
-        run: make test
+        run: uv run make test
 
-      - name: Upload coverage to CodeClimate
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v1.9.1
         env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          ./cc-test-reporter before-build
-          ./cc-test-reporter format-coverage coverage.xml --input-type coverage.py
-          ./cc-test-reporter upload-coverage
+          SONAR_TOKEN: ${{SONAR_TOKEN}}
+        with:
+          args: >
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.sources=gendiff
+            -Dsonar.tests=tests
+            -Dsonar.python.version=3.12

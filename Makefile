@@ -17,4 +17,4 @@ test: dev-install
 	uv run pytest --cov=gendiff --cov-report=xml tests/
 
 coverage: dev-install
-	uv run pytest --cov=gendiff --cov-report=term-missing tests/
+	uv run pytest --cov=gendiff --cov-report=xml:coverage.xml

@@ -4,7 +4,10 @@ Makefile
 README.md
 coverage.xml
 pyproject.toml
+requirements-dev.txt
+requirements.txt
 setup.cfg
+uv.lock
 .github/workflows/README.md
 .github/workflows/hexlet-check.yml
 .github/workflows/lint.yml
