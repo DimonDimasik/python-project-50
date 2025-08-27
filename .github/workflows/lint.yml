@@ -5,8 +5,8 @@ on:
   - pull_request
 
 jobs:
-  lint:
-    name: Linting
+  test:
+    name: Test and Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -17,32 +17,14 @@ jobs:
       - name: Setup UV
         uses: astral-sh/setup-uv@v2
         with:
+          python-version: '3.10'
           enable-cache: true
-          cache-dependency-glob: 'pyproject.toml'
 
       - name: Install dependencies
         run: uv pip install --system -e ".[dev]"
 
       - name: Run linting
-        run: uv run flake8 gendiff
-
-  test:
-    name: Testing and SonarCloud Analysis
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup UV
-        uses: astral-sh/setup-uv@v2
-        with:
-          enable-cache: true
-          cache-dependency-glob: 'pyproject.toml'
-
-      - name: Install dependencies
-        run: uv sync --dev --frozen
+        run: python -m flake8 gendiff
 
       - name: Run tests with coverage
         run: python -m pytest --cov=gendiff --cov-report=xml tests/
@@ -50,10 +32,10 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1.9.1
         env:
-          SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.sources=gendiff
             -Dsonar.tests=tests
-            -Dsonar.python.version=3.12
+            -Dsonar.python.version=3.10
