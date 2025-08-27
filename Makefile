@@ -5,7 +5,7 @@ build:
 	uv build
 
 publish:
-	uv publish --dry-run
+	uv publish -- --dry-run
 
 package-install: build
 	python3 -m pip install --user dist/*.whl
