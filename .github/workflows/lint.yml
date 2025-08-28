@@ -34,7 +34,7 @@ jobs:
           python -m pytest --cov=gendiff --cov-report=xml tests/
 
       - name: SonarCloud Scan (updated action)
-        uses: SonarSource/sonarcloud-github-action@v2.0.0
+        uses: SonarSource/sonarcloud-github-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
