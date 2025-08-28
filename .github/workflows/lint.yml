@@ -1,48 +1,37 @@
-name: lint and test
+name: Python CI
 
 on:
   - push
   - pull_request
 
 jobs:
-  test:
-    name: Testing and SonarCloud Analysis
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          fetch-depth: 0
-
-      - name: Setup UV
-        uses: astral-sh/setup-uv@v2
-        with:
-          python-version: '3.10'
-          enable-cache: true
-
-      - name: Create virtual environment
-        run: uv venv
-
+          python-version: '3.12'
       - name: Install dependencies
         run: |
-          source .venv/bin/activate
-          uv pip install -e . pytest pytest-cov coverage
-
-      - name: Run tests with coverage
+          pip install uv
+          make install
+      - name: Run linter and pytest
         run: |
-          source .venv/bin/activate
-          python -m pytest --cov=gendiff --cov-report=xml tests/
+          make check
+      - name: Run test coverage
+        run: |
+          make test-coverage
 
-      - name: SonarCloud Scan
+      - name: SonarQubeScan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=DimonDimasik
             -Dsonar.projectKey=DimonDimasik_python-project-50
+            -Dsonar.organization=DimonDimasik
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.sources=gendiff
-            -Dsonar.tests=tests
-            -Dsonar.python.version=3.10
+            -Dsonar.coverage.exclusions=tests/**
+            -Dsonar.exclusions=tests/**
