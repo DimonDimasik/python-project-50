@@ -33,13 +33,15 @@ jobs:
           source .venv/bin/activate
           python -m pytest --cov=gendiff --cov-report=xml tests/
 
-      - name: SonarCloud Scan (updated action)
+      - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
+            -Dsonar.organization=DimonDimasik
+            -Dsonar.projectKey=DimonDimasik_hexlet-code
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.sources=gendiff
             -Dsonar.tests=tests
