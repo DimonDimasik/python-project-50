@@ -41,7 +41,7 @@ jobs:
         with:
           args: >
             -Dsonar.organization=DimonDimasik
-            -Dsonar.projectKey=DimonDimasik_hexlet-code
+            -Dsonar.projectKey=DimonDimasik_python-project-50
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.sources=gendiff
             -Dsonar.tests=tests
