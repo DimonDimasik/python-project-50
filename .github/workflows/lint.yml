@@ -20,22 +20,30 @@ jobs:
           python-version: '3.10'
           enable-cache: true
 
-      - name: Install dependencies
-        run: uv sync --dev
+      - name: Create virtual environment
+        run: uv venv
+
+      - name: Install project dependencies
+        run: |
+          source .venv/bin/activate
+          uv pip install -e .
+
+      - name: Install test dependencies explicitly
+        run: |
+          source .venv/bin/activate
+          uv pip install pytest pytest-cov coverage
+
+      - name: Verify installations
+        run: |
+          source .venv/bin/activate
+          python -m pytest --version
+          python -m coverage --version
+          python -c "import pytest; print(f'pytest {pytest.__version__} installed')"
 
       - name: Run tests with coverage
-        run: .venv/bin/python -m pytest --cov=gendiff --cov-report=xml tests/
-
-      - name: Verify coverage file
         run: |
-          if [ -f coverage.xml ]; then
-            echo "✅ coverage.xml found"
-            ls -la coverage.xml
-          else
-            echo "❌ coverage.xml not found!"
-            ls -la
-            exit 1
-          fi
+          source .venv/bin/activate
+          python -m pytest --cov=gendiff --cov-report=xml tests/
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1.9.1
