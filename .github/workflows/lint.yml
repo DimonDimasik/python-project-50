@@ -23,27 +23,24 @@ jobs:
       - name: Create virtual environment
         run: uv venv
 
-      - name: Install project dependencies
+      - name: Install dependencies
         run: |
           source .venv/bin/activate
-          uv pip install -e .
-
-      - name: Install test dependencies explicitly
-        run: |
-          source .venv/bin/activate
-          uv pip install pytest pytest-cov coverage
-
-      - name: Verify installations
-        run: |
-          source .venv/bin/activate
-          python -m pytest --version
-          python -m coverage --version
-          python -c "import pytest; print(f'pytest {pytest.__version__} installed')"
+          uv pip install -e . pytest pytest-cov coverage
 
       - name: Run tests with coverage
         run: |
           source .venv/bin/activate
           python -m pytest --cov=gendiff --cov-report=xml tests/
+
+      - name: Setup Java 17 (для SonarCloud)
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Verify Java version
+        run: java -version
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1.9.1
