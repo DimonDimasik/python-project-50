@@ -24,7 +24,19 @@ jobs:
         run: uv sync --dev
 
       - name: Run tests with coverage
-        run: uv run --with .venv python -m pytest --cov=gendiff --cov-report=xml tests/
+        run: .venv/bin/python -m pytest --cov=gendiff --cov-report=xml tests/
+
+      - name: Verify coverage file
+        run: |
+          if [ -f coverage.xml ]; then
+            echo "✅ coverage.xml found"
+            ls -la coverage.xml
+          else
+            echo "❌ coverage.xml not found!"
+            ls -la
+            exit 1
+          fi
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1.9.1
         env:
