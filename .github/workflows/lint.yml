@@ -1,37 +1,56 @@
-name: Python CI
+name: CI with SonarCloud
 
 on:
   - push
   - pull_request
 
 jobs:
-  build:
+  test:
+    name: Test and Analyze
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          python-version: '3.12'
+          fetch-depth: 0
+
+      - name: Setup UV
+        uses: astral-sh/setup-uv@v2
+        with:
+          python-version: '3.10'
+          enable-cache: true
+
       - name: Install dependencies
         run: |
-          pip install uv
-          make install
-      - name: Run linter and pytest
-        run: |
-          make check
-      - name: Run test coverage
-        run: |
-          make test-coverage
+          uv venv
+          source .venv/bin/activate
+          uv pip install -e . pytest pytest-cov coverage
 
-      - name: SonarQubeScan
-        uses: SonarSource/sonarqube-scan-action@v5
+      - name: Run tests with coverage
+        run: |
+          source .venv/bin/activate
+          python -m pytest --cov=gendiff --cov-report=xml tests/
+
+      - name: Verify coverage file
+        run: |
+          if [ -f coverage.xml ]; then
+            echo "✅ coverage.xml found"
+            ls -la coverage.xml
+          else
+            echo "❌ coverage.xml not found!"
+            exit 1
+          fi
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2.1.0
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=DimonDimasik_python-project-50
-            -Dsonar.organization=DimonDimasik
+            -Dsonar.organization=${{ github.repository_owner }}
+            -Dsonar.projectKey=${{ github.repository }}
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.coverage.exclusions=tests/**
-            -Dsonar.exclusions=tests/**
+            -Dsonar.sources=gendiff
+            -Dsonar.tests=tests
+            -Dsonar.python.version=3.10
