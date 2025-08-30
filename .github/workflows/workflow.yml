@@ -30,17 +30,24 @@ jobs:
         run: |
           source .venv/bin/activate
           cd $GITHUB_WORKSPACE
-          python -m pytest --cov=gendiff --cov-report=xml --cov-report=term tests/
+          python -m pytest --cov=gendiff --cov-report=xml tests/
 
-      - name: Debug coverage file
+      - name: Fix coverage.xml paths
         run: |
-          echo "=== Coverage File Analysis ==="
-          ls -la coverage.xml
-          echo "File size: $(du -h coverage.xml)"
-          echo "First few lines:"
-          head -5 coverage.xml
-          echo "Coverage data found:"
-          grep -c "filename=" coverage.xml || echo "No files in coverage"
+          echo "Fixing paths in coverage.xml..."
+          sed -i 's|/home/runner/work/python-project-50/python-project-50/||g' coverage.xml
+          sed -i 's|modules/||g' coverage.xml
+          echo "Fixed paths:"
+          grep "filename=" coverage.xml | head -3
+
+      - name: Verify coverage file
+        run: |
+          echo "=== Coverage File Content ==="
+          head -10 coverage.xml
+          echo "=== Files in coverage ==="
+          grep "filename=" coverage.xml | head -5
+          echo "=== Coverage summary ==="
+          grep -E "line-rate|branch-rate" coverage.xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.0
