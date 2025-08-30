@@ -48,8 +48,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=dimondimasik  # ← lowercase!
-            -Dsonar.projectKey=dimondimasik_python-project-50  # ← lowercase!
+            -Dsonar.organization=dimondimasik
+            -Dsonar.projectKey=dimondimasik_python-project-50
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.sources=gendiff
             -Dsonar.tests=tests
