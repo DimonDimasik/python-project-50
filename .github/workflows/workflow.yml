@@ -54,3 +54,4 @@ jobs:
             -Dsonar.sources=.
             -Dsonar.tests=tests
             -Dsonar.python.version=3.10
+            -Dsonar.coverage.exclusions=**/tests/**,**/__pycache__/**
