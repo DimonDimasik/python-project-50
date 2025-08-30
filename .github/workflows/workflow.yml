@@ -29,17 +29,18 @@ jobs:
       - name: Run tests with coverage
         run: |
           source .venv/bin/activate
-          python -m pytest --cov=gendiff --cov-report=xml tests/
+          cd $GITHUB_WORKSPACE
+          python -m pytest --cov=gendiff --cov-report=xml --cov-report=term tests/
 
-      - name: Verify coverage file
+      - name: Debug coverage file
         run: |
-          if [ -f coverage.xml ]; then
-            echo "✅ coverage.xml found"
-            ls -la coverage.xml
-          else
-            echo "❌ coverage.xml not found!"
-            exit 1
-          fi
+          echo "=== Coverage File Analysis ==="
+          ls -la coverage.xml
+          echo "File size: $(du -h coverage.xml)"
+          echo "First few lines:"
+          head -5 coverage.xml
+          echo "Coverage data found:"
+          grep -c "filename=" coverage.xml || echo "No files in coverage"
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.0
@@ -54,6 +55,5 @@ jobs:
             -Dsonar.sources=gendiff
             -Dsonar.tests=tests
             -Dsonar.python.version=3.10
-            -Dsonar.coverage.exclusions=**/tests/**,**/__pycache__/**
             -Dsonar.exclusions=**/tests/**,**/__pycache__/**,**/.venv/**
-            -Dsonar.test.exclusions=**/gendiff/**
+            -Dsonar.coverage.exclusions=**/tests/**,**/__pycache__/**
