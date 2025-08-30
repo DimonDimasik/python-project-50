@@ -49,7 +49,7 @@ jobs:
         with:
           args: >
             -Dsonar.organization=dimondimasik
-            -Dsonar.projectKey=dimondimasik_python-project-50
+            -Dsonar.projectKey=DimonDimasik_python-project-50
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.sources=gendiff
             -Dsonar.tests=tests
