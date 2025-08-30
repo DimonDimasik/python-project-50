@@ -50,8 +50,6 @@ jobs:
           args: >
             -Dsonar.organization=DimonDimasik
             -Dsonar.projectKey=DimonDimasik_python-project-50
-            -Dsonar.projectName=python-project-50
-            -Dsonar.projectVersion=1.0
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.sources=gendiff
             -Dsonar.tests=tests
