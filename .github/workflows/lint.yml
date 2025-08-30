@@ -48,8 +48,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=${{ github.repository_owner }}
-            -Dsonar.projectKey=${{ github.repository }}
+            -Dsonar.organization=${{ DimonDimasik }}
+            -Dsonar.projectKey=${{ DimonDimasik_python-project-50 }}
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.sources=gendiff
             -Dsonar.tests=tests
