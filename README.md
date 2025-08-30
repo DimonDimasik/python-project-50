@@ -1,10 +1,21 @@
 
-<div style="display: flex; justify-content: space-between;">
+<div style="display: flex; justify-content: space-between; align-items: center;">
 
-<a href="https://codeclimate.com/github/DimonDimasik/python-project-50/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4f22b711b4f8a355fcf6/test_coverage" /></a>
+<!-- Quality Gate -->
+<a href="https://sonarcloud.io/summary/new_code?id=DimonDimasik_python-project-50">
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=DimonDimasik_python-project-50&metric=alert_status" alt="Quality Gate" />
+</a>
 
+<!-- Coverage -->
+<a href="https://sonarcloud.io/summary/new_code?id=DimonDimasik_python-project-50">
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=DimonDimasik_python-project-50&metric=coverage" alt="Coverage" />
+</a>
 
-<a href="https://codeclimate.com/github/DimonDimasik/python-project-50/maintainability"><img src="https://api.codeclimate.com/v1/badges/4f22b711b4f8a355fcf6/maintainability" /></a>
+<!-- Bugs -->
+<a href="https://sonarcloud.io/summary/new_code?id=DimonDimasik_python-project-50">
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=DimonDimasik_python-project-50&metric=bugs" alt="Bugs" />
+</a>
+
 </div>
 
 <!-- HTML for MD, CSS -->
