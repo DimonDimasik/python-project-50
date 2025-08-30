@@ -51,7 +51,9 @@ jobs:
             -Dsonar.organization=dimondimasik
             -Dsonar.projectKey=DimonDimasik_python-project-50
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.sources=.
+            -Dsonar.sources=gendiff
             -Dsonar.tests=tests
             -Dsonar.python.version=3.10
             -Dsonar.coverage.exclusions=**/tests/**,**/__pycache__/**
+            -Dsonar.exclusions=**/tests/**,**/__pycache__/**,**/.venv/**
+            -Dsonar.test.exclusions=**/gendiff/**
