@@ -30,18 +30,29 @@ jobs:
         run: |
           source .venv/bin/activate
           cd $GITHUB_WORKSPACE
-          python -m coverage run --source=gendiff -m pytest tests/
+          python -m coverage run --source=. -m pytest tests/
           python -m coverage xml
 
-      - name: Fix coverage paths
+      - name: Clean coverage.xml absolutely
         run: |
-          echo "Current paths in coverage.xml:"
-          grep "filename=" coverage.xml | head -5
-          echo "Fixing paths..."
-          sed -i 's|/home/runner/work/python-project-50/python-project-50/||g' coverage.xml
-          sed -i 's|filename="\([^/]*\.py\)"|filename="gendiff/\1"|g' coverage.xml
-          echo "Fixed paths:"
-          grep "filename=" coverage.xml | head -5
+          echo "=== BEFORE CLEANING ==="
+          grep "filename=" coverage.xml | head -3
+          
+          sed -i 's|/.*/python-project-50/||g' coverage.xml
+          sed -i 's|/home/.*/||g' coverage.xml
+          sed -i 's|/github/.*/||g' coverage.xml
+          
+          sed -i 's|filename="/.*"|filename="."|g' coverage.xml
+          
+          echo "=== AFTER CLEANING ==="
+          grep "filename=" coverage.xml | head -3
+
+      - name: Verify coverage
+        run: |
+          echo "Coverage file content sample:"
+          head -15 coverage.xml
+          echo "Number of files covered:"
+          grep -c "filename=" coverage.xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.0
@@ -57,4 +68,3 @@ jobs:
             -Dsonar.tests=tests
             -Dsonar.python.version=3.10
             -Dsonar.exclusions=**/tests/**,**/__pycache__/**,**/.venv/**
-            -Dsonar.coverage.exclusions=**/tests/**,**/__pycache__/**
