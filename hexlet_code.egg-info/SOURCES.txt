@@ -10,9 +10,7 @@ setup.cfg
 uv.lock
 .github/workflows/README.md
 .github/workflows/hexlet-check.yml
-.github/workflows/lint.yml
-dist/hexlet_code-0.1.0-py3-none-any.whl
-dist/hexlet_code-0.1.0.tar.gz
+.github/workflows/workflow.yml
 gendiff/__init__
 gendiff/modules/__init__
 gendiff/modules/generate_diff.py
@@ -28,7 +26,6 @@ hexlet_code.egg-info/dependency_links.txt
 hexlet_code.egg-info/entry_points.txt
 hexlet_code.egg-info/requires.txt
 hexlet_code.egg-info/top_level.txt
-tests/.codeclimate.yml
 tests/__init__
 tests/test_generate_diff.py
 tests/fixtures/empty.json

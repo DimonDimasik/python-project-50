@@ -3,6 +3,7 @@ import yaml
 from gendiff.modules.stylish import stylish
 from gendiff.modules.plain import plain
 
+
 def format_value(value):
     """Converts a value to a string of the required format"""
     if isinstance(value, bool):

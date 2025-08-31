@@ -30,7 +30,7 @@ def display_plain(key_list, removed_dict, added_dict):
         elif item in changed:
             result.append(f"Property '{item}' was updated. From {format_plain_value(removed_dict[item])} to {format_plain_value(added_dict[item])}")
     return '\n'.join(result)
-    
+
 
 def plain(diff_str):
     lines = diff_str.split('\n')
