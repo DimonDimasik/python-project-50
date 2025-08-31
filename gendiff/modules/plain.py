@@ -1,6 +1,6 @@
 def format_plain_value(value):
     """Converts a value to a string of the required format"""
-    exceptions = ('true', 'false', 'null', '[comlex value]')
+    exceptions = ('true', 'false', 'null', '[complex value]')
     if value in exceptions:
         return value
     elif value is None:
@@ -45,7 +45,7 @@ def plain(diff_str):
             path.append(separate(line)[0])
             key = '.'.join(path)
             if line.endswith('{'):
-                value = '[comlex value]'
+                value = '[complex value]'
                 if key not in keys:
                     keys.append(key)
                 deleted.update({f'{key}': f'{value}'})
@@ -59,7 +59,7 @@ def plain(diff_str):
             path.append(separate(line)[0])
             key = '.'.join(path)
             if line.endswith('{'):
-                value = '[comlex value]'
+                value = '[complex value]'
                 if key not in keys:
                     keys.append(key)
                 added.update({f'{key}': f'{value}'})
