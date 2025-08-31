@@ -26,24 +26,33 @@ jobs:
           source .venv/bin/activate
           uv pip install -e . pytest pytest-cov coverage
 
-      - name: Run tests with clean coverage
+      - name: Clean previous coverage
+        run: |
+          rm -f .coverage coverage.xml
+
+      - name: Run tests with proper coverage
         run: |
           source .venv/bin/activate
           cd $GITHUB_WORKSPACE
-          python -m coverage run --source=gendiff -m pytest tests/
-          python -m coverage xml
+          python -m coverage run --source=. --omit="tests/*,__pycache__/*,.venv/*" -m pytest tests/
+          python -m coverage xml -i
 
-      - name: Remove all path prefixes
+      - name: Verify coverage file
         run: |
-          echo "Removing all path prefixes from coverage.xml..."
-          sed -i 's|python-project-50/||g' coverage.xml
-          sed -i 's|/.*/python-project-50/||g' coverage.xml
-          sed -i 's|/home/.*/||g' coverage.xml
-          sed -i 's|/github/.*/||g' coverage.xml
-          sed -i 's|filename="/.*"|filename="gendiff/"|g' coverage.xml
-          
-          echo "Final paths:"
-          grep "filename=" coverage.xml | head -3
+          echo "=== COVERAGE FILE INFO ==="
+          ls -la coverage.xml
+          echo "File size: $(du -h coverage.xml)"
+          echo "First few lines:"
+          head -5 coverage.xml
+          echo "XML validity check:"
+          python -c "
+          import xml.etree.ElementTree as ET
+          try:
+              ET.parse('coverage.xml')
+              print('✅ XML is valid')
+          except Exception as e:
+              print('❌ XML is invalid:', e)
+          "
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.0
@@ -55,7 +64,7 @@ jobs:
             -Dsonar.organization=dimondimasik
             -Dsonar.projectKey=DimonDimasik_python-project-50
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.sources=gendiff
+            -Dsonar.sources=.
             -Dsonar.tests=tests
             -Dsonar.python.version=3.10
             -Dsonar.exclusions=**/tests/**,**/__pycache__/**,**/.venv/**
