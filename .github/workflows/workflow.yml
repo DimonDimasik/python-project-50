@@ -30,44 +30,46 @@ jobs:
         run: |
           rm -f .coverage coverage.xml
 
-      - name: Generate coverage with relative paths
+      - name: Generate coverage
         run: |
           source .venv/bin/activate
-
           cd $GITHUB_WORKSPACE
+          python -m coverage run --source=. --omit="tests/*,__pycache__/*,.venv/*" -m pytest tests/
+          python -m coverage xml
 
-          python -c "
-          import coverage
-          import pytest
-          import os
-
-          print('Current working directory:', os.getcwd())
-          print('Files in directory:', os.listdir('.'))
-
-          cov = coverage.Coverage(
-              source=['.'],
-              omit=['tests/*', '__pycache__/*', '.venv/*'],
-              config_file=False
-          )
-
-          cov.start()
-          exit_code = pytest.main(['tests/'])
-          cov.stop()
-          cov.save()
-          cov.xml_report(outfile='coverage.xml')
-          "
-
-          echo "Coverage generation completed"
-
-      - name: Verify and fix coverage
+      - name: Remove ALL path prefixes
         run: |
           cd $GITHUB_WORKSPACE
-          echo "=== RAW COVERAGE.XML ==="
-          head -10 coverage.xml
-          echo "=== PATHS IN COVERAGE ==="
-          grep "filename=" coverage.xml | head -3
+          echo "Removing all path prefixes from coverage.xml..."
 
+          sed -i 's|python-project-50/||g' coverage.xml
           sed -i 's|/.*/python-project-50/||g' coverage.xml
+          sed -i 's|/home/.*/||g' coverage.xml
+          sed -i 's|/github/.*/||g' coverage.xml
+
+          sed -i 's|filename="/.*"|filename="."|g' coverage.xml
+          
+          echo "Final paths:"
+          grep "filename=" coverage.xml | head -5
+
+      - name: Verify coverage XML
+        run: |
+          cd $GITHUB_WORKSPACE
+          echo "=== FINAL COVERAGE VALIDATION ==="
+          python -c "
+          import xml.etree.ElementTree as ET
+          try:
+              tree = ET.parse('coverage.xml')
+              root = tree.getroot()
+              print('✅ XML is valid')
+              print('Coverage rate:', root.get('line-rate', 'unknown'))
+              files = root.findall('.//class')
+              print('Number of files:', len(files))
+              for f in files[:3]:
+                  print(f'  - {f.get(\"filename\")}')
+          except Exception as e:
+              print('❌ XML error:', e)
+          "
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.0
