@@ -11,65 +11,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Setup UV
-        uses: astral-sh/setup-uv@v2
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          enable-cache: true
 
       - name: Install dependencies
         run: |
-          uv venv
-          source .venv/bin/activate
-          uv pip install -e . pytest pytest-cov coverage
+          pip install -e . pytest pytest-cov coverage
 
-      - name: Clean previous coverage
+      - name: Run tests and generate coverage
         run: |
-          rm -f .coverage coverage.xml
-
-      - name: Generate coverage
-        run: |
-          source .venv/bin/activate
-          cd $GITHUB_WORKSPACE
-          python -m coverage run --source=. --omit="tests/*,__pycache__/*,.venv/*" -m pytest tests/
+          python -m coverage run --source=. --omit="tests/*,__pycache__/*" -m pytest tests/
           python -m coverage xml
-
-      - name: Remove ALL path prefixes
-        run: |
-          cd $GITHUB_WORKSPACE
-          echo "Removing all path prefixes from coverage.xml..."
-
-          sed -i 's|python-project-50/||g' coverage.xml
-          sed -i 's|/.*/python-project-50/||g' coverage.xml
-          sed -i 's|/home/.*/||g' coverage.xml
-          sed -i 's|/github/.*/||g' coverage.xml
-
-          sed -i 's|filename="/.*"|filename="."|g' coverage.xml
-          
-          echo "Final paths:"
-          grep "filename=" coverage.xml | head -5
-
-      - name: Verify coverage XML
-        run: |
-          cd $GITHUB_WORKSPACE
-          echo "=== FINAL COVERAGE VALIDATION ==="
-          python -c "
-          import xml.etree.ElementTree as ET
-          try:
-              tree = ET.parse('coverage.xml')
-              root = tree.getroot()
-              print('✅ XML is valid')
-              print('Coverage rate:', root.get('line-rate', 'unknown'))
-              files = root.findall('.//class')
-              print('Number of files:', len(files))
-              for f in files[:3]:
-                  print(f'  - {f.get(\"filename\")}')
-          except Exception as e:
-              print('❌ XML error:', e)
-          "
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.0
@@ -84,4 +39,3 @@ jobs:
             -Dsonar.sources=.
             -Dsonar.tests=tests
             -Dsonar.python.version=3.10
-            -Dsonar.exclusions=**/tests/**,**/__pycache__/**,**/.venv/**
