@@ -11,20 +11,63 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Setup UV
+        uses: astral-sh/setup-uv@v2
         with:
           python-version: '3.10'
+          enable-cache: true
 
       - name: Install dependencies
         run: |
-          pip install -e . pytest pytest-cov coverage
+          uv venv
+          source .venv/bin/activate
+          uv pip install -e . pytest pytest-cov coverage
 
-      - name: Run tests and generate coverage
+      - name: Clean previous coverage
         run: |
-          python -m coverage run --source=. --omit="tests/*,__pycache__/*" -m pytest tests/
-          python -m coverage xml
+          rm -f .coverage coverage.xml
+
+      - name: Generate coverage with relative paths
+        run: |
+          source .venv/bin/activate
+
+          cd $GITHUB_WORKSPACE
+
+          python -c "
+          import coverage
+          import pytest
+          import os
+          
+          print('Current working directory:', os.getcwd())
+          print('Files in directory:', os.listdir('.'))
+          
+          cov = coverage.Coverage(
+              source=['.'],
+              omit=['tests/*', '__pycache__/*', '.venv/*'],
+              config_file=False
+          )
+          
+          cov.start()
+          exit_code = pytest.main(['tests/'])
+          cov.stop()
+          cov.save()
+          cov.xml_report(outfile='coverage.xml')
+          "
+          
+          echo "Coverage generation completed"
+
+      - name: Verify and fix coverage
+        run: |
+          cd $GITHUB_WORKSPACE
+          echo "=== RAW COVERAGE.XML ==="
+          head -10 coverage.xml
+          echo "=== PATHS IN COVERAGE ==="
+          grep "filename=" coverage.xml | head -3
+
+          sed -i 's|/.*/python-project-50/||g' coverage.xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.0
@@ -39,3 +82,4 @@ jobs:
             -Dsonar.sources=.
             -Dsonar.tests=tests
             -Dsonar.python.version=3.10
+            -Dsonar.exclusions=**/tests/**,**/__pycache__/**,**/.venv/**
