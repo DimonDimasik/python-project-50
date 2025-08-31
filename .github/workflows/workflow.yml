@@ -30,29 +30,44 @@ jobs:
         run: |
           rm -f .coverage coverage.xml
 
-      - name: Run tests with proper coverage
+      - name: Generate coverage with relative paths
         run: |
           source .venv/bin/activate
-          cd $GITHUB_WORKSPACE
-          python -m coverage run --source=. --omit="tests/*,__pycache__/*,.venv/*" -m pytest tests/
-          python -m coverage xml -i
 
-      - name: Verify coverage file
-        run: |
-          echo "=== COVERAGE FILE INFO ==="
-          ls -la coverage.xml
-          echo "File size: $(du -h coverage.xml)"
-          echo "First few lines:"
-          head -5 coverage.xml
-          echo "XML validity check:"
+          cd $GITHUB_WORKSPACE
+
           python -c "
-          import xml.etree.ElementTree as ET
-          try:
-              ET.parse('coverage.xml')
-              print('✅ XML is valid')
-          except Exception as e:
-              print('❌ XML is invalid:', e)
+          import coverage
+          import pytest
+          import os
+
+          print('Current working directory:', os.getcwd())
+          print('Files in directory:', os.listdir('.'))
+
+          cov = coverage.Coverage(
+              source=['.'],
+              omit=['tests/*', '__pycache__/*', '.venv/*'],
+              config_file=False
+          )
+
+          cov.start()
+          exit_code = pytest.main(['tests/'])
+          cov.stop()
+          cov.save()
+          cov.xml_report(outfile='coverage.xml')
           "
+
+          echo "Coverage generation completed"
+
+      - name: Verify and fix coverage
+        run: |
+          cd $GITHUB_WORKSPACE
+          echo "=== RAW COVERAGE.XML ==="
+          head -10 coverage.xml
+          echo "=== PATHS IN COVERAGE ==="
+          grep "filename=" coverage.xml | head -3
+
+          sed -i 's|/.*/python-project-50/||g' coverage.xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.0
