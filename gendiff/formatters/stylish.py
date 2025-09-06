@@ -1,4 +1,4 @@
-def stylish(diff_str):
+def format_diff_stylish(diff_str):
     """Adds indentation to the diff line"""
 
     lines = diff_str.split('\n')

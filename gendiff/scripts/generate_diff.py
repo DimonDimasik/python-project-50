@@ -1,7 +1,6 @@
 import json
 import yaml
-from gendiff.modules.stylish import stylish
-from gendiff.modules.plain import plain
+from gendiff.formatters.format import choose_formatter
 
 
 def format_value(value):
@@ -107,6 +106,5 @@ def generate_diff(first_file, second_file, format_name='stylish'):
     """Creates a diff between two files"""
     first_file = open_file(first_file)
     second_file = open_file(second_file)
-    formater = globals().get(format_name)
     diff = build_diff(first_file, second_file)
-    return formater(diff)
+    return choose_formatter(diff, format_name)

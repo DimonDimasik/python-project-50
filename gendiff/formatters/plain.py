@@ -32,7 +32,7 @@ def display_plain(key_list, removed_dict, added_dict):
     return '\n'.join(result)
 
 
-def plain(diff_str):
+def format_diff_plain(diff_str):
     lines = diff_str.split('\n')
     path = []
     keys = []

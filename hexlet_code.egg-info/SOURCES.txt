@@ -12,11 +12,6 @@ uv.lock
 .github/workflows/hexlet-check.yml
 .github/workflows/workflow.yml
 gendiff/__init__
-gendiff/modules/__init__
-gendiff/modules/generate_diff.py
-gendiff/modules/parser.py
-gendiff/modules/plain.py
-gendiff/modules/stylish.py
 gendiff/scripts/__init__
 gendiff/scripts/gendiff.py
 gendiff/scripts/__pycache__/gendiff.cpython-310.pyc
