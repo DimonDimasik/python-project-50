@@ -12,8 +12,13 @@ uv.lock
 .github/workflows/hexlet-check.yml
 .github/workflows/workflow.yml
 gendiff/__init__
+gendiff/formatters/__init__
+gendiff/formatters/format.py
+gendiff/formatters/plain.py
+gendiff/formatters/stylish.py
 gendiff/scripts/__init__
 gendiff/scripts/gendiff.py
+gendiff/scripts/generate_diff.py
 gendiff/scripts/__pycache__/gendiff.cpython-310.pyc
 hexlet_code.egg-info/PKG-INFO
 hexlet_code.egg-info/SOURCES.txt
