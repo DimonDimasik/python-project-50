@@ -30,5 +30,8 @@
 ### Example of gendiff (yaml):
 [![asciicast](https://asciinema.org/a/WvsZrGC05IJkOBMlvhal6GH3T.svg)](https://asciinema.org/a/WvsZrGC05IJkOBMlvhal6GH3T)
 
-### Example of gendiff with nested structures(yaml):
+### Example of gendiff with nested structures(format='stylish'):
 [![asciicast](https://asciinema.org/a/p7R6KKhllxpuRX88SoJHoENGO.svg)](https://asciinema.org/a/p7R6KKhllxpuRX88SoJHoENGO)
+
+### Example of gendiff with nested structures(format='plain'):
+[![asciicast](https://asciinema.org/a/3Qjktlf8SuD2d1vvyt8ZhOCjW.svg)](https://asciinema.org/a/3Qjktlf8SuD2d1vvyt8ZhOCjW)
