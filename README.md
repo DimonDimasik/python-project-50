@@ -35,3 +35,6 @@
 
 ### Example of gendiff with nested structures(format='plain'):
 [![asciicast](https://asciinema.org/a/3Qjktlf8SuD2d1vvyt8ZhOCjW.svg)](https://asciinema.org/a/3Qjktlf8SuD2d1vvyt8ZhOCjW)
+
+### Example of gendiff with nested structures(format='json'):
+[![asciicast](https://asciinema.org/a/aVCgDONvmyloPKl6iOf9FYkfM.svg)](https://asciinema.org/a/aVCgDONvmyloPKl6iOf9FYkfM)

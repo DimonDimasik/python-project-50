@@ -3,6 +3,7 @@
 Makefile
 README.md
 coverage.xml
+demo.cast
 pyproject.toml
 requirements-dev.txt
 requirements.txt

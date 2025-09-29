@@ -1,97 +1,50 @@
 import json
 import yaml
 from gendiff.formatters.format import choose_formatter
+from gendiff.formatters.stylish import is_dict
 
 
-def format_value(value):
-    """Converts a value to a string of the required format"""
-    if isinstance(value, bool):
-        return str(value).lower()
-    elif value is None:
-        return 'null'
-    elif isinstance(value, (int, float)):
-        return str(value)
-    elif isinstance(value, str):
-        return value
-    return str(value)
+def make_added(key, val):
+    return {f'{key}': {'action': 'added', 'name': f'{key}', 'new_value': val}}
 
 
-def format_dict(data):
-    """
-    Converts a dictionary, including nested dictionaries,
-    to a string of the required format
-    """
-    lines = []
-    for k, v in data.items():
-        if not isinstance(v, dict):
-            lines.append(f'{format_value(k)}: {format_value(v)}')
-        else:
-            lines.append(f'{format_value(k)}: {{')
-            lines.append(f'{format_dict(v)}')
-            lines.append('}')
-    return '\n'.join(lines)
+def make_deleted(key, val):
+    return {f'{key}': {'action': 'deleted', 'name': f'{key}', 'old_value': val}}
 
 
-def is_dict(value):
-    """Checks if a value is a dictionary"""
-    return True if isinstance(value, dict) else False
+def make_unchanged(key, val):
+    return {f'{key}': {'action': 'unchanged', 'name': f'{key}', 'value': val}}
 
 
-def format_diff(key, value, symbol=''):
-    """Creates a visual display of the diff"""
-    if not is_dict(value):
-        return f'{symbol}{format_value(key)}: {format_value(value)}'
-    else:
-        result = []
-        result.append(f'{symbol}{key}: {{')
-        for k, v in value.items():
-            result.append(format_diff(k, v))
-        result.append('}')
-    return '\n'.join(result)
+def make_changed(key, old_val, new_val):
+    return {f'{key}': {'action': 'changed', 'name': f'{key}', 'old_value': old_val, 'new_value': new_val}}
 
 
-def build_diff(first_dict, second_dict):
-    """Builds a diff for two dictionaries, including nested dictionaries"""
+def make_nested(key, val):
+    return {f'{key}': {'action': 'nested', 'name': f'{key}', 'children': val}}
 
-    def inner(first, second):
-        lines = []
-        keys = sorted(set(first.keys()) | set(second.keys()))
-        first_set = set(first.keys()) - set(second.keys())
-        second_set = set(second.keys()) - set(first.keys())
-        intersection = set(first.keys()) & set(second.keys())
-        for item in keys:
 
-            if item in first_set:
-                if not is_dict(first[item]):
-                    lines.append(format_diff(item, first[item], '- '))
+def find_diff(first_dict, second_dict):
+    diff = {}
+    keys = set(first_dict.keys()) | set(second_dict.keys())
+    first_set = set(first_dict.keys()) - set(second_dict.keys())
+    second_set = set(second_dict.keys()) - set(first_dict.keys())
+    intersection = set(first_dict.keys()) & set(second_dict.keys())
+    for item in keys:
+        if item in first_set:
+            diff.update(make_deleted(item, first_dict[item]))
+        elif item in second_set:
+            diff.update(make_added(item, second_dict[item]))
+        elif item in intersection:
+            if not is_dict(first_dict[item]) or not is_dict(second_dict[item]):
+                if first_dict[item] == second_dict[item]:
+                    diff.update(make_unchanged(item, first_dict[item]))
                 else:
-                    lines.append(f'- {item}: {{')
-                    lines.append(format_dict(first[item]))
-                    lines.append('}')
-            if item in second_set:
-                if not is_dict(second[item]):
-                    lines.append(format_diff(item, second[item], '+ '))
-                else:
-                    lines.append(f'+ {item}: {{')
-                    lines.append(format_dict(second[item]))
-                    lines.append('}')
-
-            if item in intersection:
-                if not is_dict(first[item]) or not is_dict(second[item]):
-                    if first[item] == second[item]:
-                        lines.append(format_diff(item, first[item], '  '))
-                    else:
-                        lines.append(format_diff(item, first[item], '- '))
-                        lines.append(format_diff(item, second[item], '+ '))
-                else:
-                    lines.append(format_diff(item, '{', '  '))
-                    nested = inner(first[item], second[item])
-                    if nested:
-                        lines.append(nested)
-                    lines.append('}')
-        return '\n'.join(lines)
-    result = inner(first_dict, second_dict)
-    return f'{{\n{result}\n}}'
+                    diff.update(make_changed(item, first_dict[item], second_dict[item]))
+            elif is_dict(first_dict[item]) and is_dict(second_dict[item]):
+                nested = find_diff(first_dict[item], second_dict[item])
+                diff.update(make_nested(item, nested))
+    return diff
 
 
 def open_file(file_name):
@@ -106,5 +59,5 @@ def generate_diff(first_file, second_file, format_name='stylish'):
     """Creates a diff between two files"""
     first_file = open_file(first_file)
     second_file = open_file(second_file)
-    diff = build_diff(first_file, second_file)
+    diff = find_diff(first_file, second_file)
     return choose_formatter(diff, format_name)
