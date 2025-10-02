@@ -77,3 +77,8 @@ def test_format_value():
 def test_generate_diff_plain(json_file21, json_file22):
     expected = "Property 'common.follow' was added with value: false\nProperty 'common.setting2' was removed\nProperty 'common.setting3' was updated. From true to null\nProperty 'common.setting4' was added with value: 'blah blah'\nProperty 'common.setting5' was added with value: [complex value]\nProperty 'common.setting6.doge.wow' was updated. From '' to 'so much'\nProperty 'common.setting6.ops' was added with value: 'vops'\nProperty 'group1.baz' was updated. From 'bas' to 'bars'\nProperty 'group1.nest' was updated. From [complex value] to 'str'\nProperty 'group2' was removed\nProperty 'group3' was added with value: [complex value]"
     assert generate_diff(json_file21, json_file22, 'plain') == expected
+
+
+def test_generate_diff_json(json_file1, json_file2):
+    expected = "[\n    {\n        \"action\": \"deleted\",\n        \"name\": \"follow\",\n        \"old_value\": false\n    },\n    {\n        \"action\": \"unchanged\",\n        \"name\": \"host\",\n        \"value\": \"hexlet.io\"\n    },\n    {\n        \"action\": \"deleted\",\n        \"name\": \"proxy\",\n        \"old_value\": \"123.234.53.22\"\n    },\n    {\n        \"action\": \"changed\",\n        \"name\": \"timeout\",\n        \"old_value\": 50,\n        \"new_value\": 20\n    },\n    {\n        \"action\": \"added\",\n        \"name\": \"verbose\",\n        \"new_value\": true\n    }\n]"
+    assert generate_diff(json_file1, json_file2, 'json') == expected

@@ -4,6 +4,7 @@ from gendiff.formatters.json import format_diff_json
 
 
 def choose_formatter(diff, formatter):
+    """Selects the display format of the differential"""
     if formatter == 'stylish':
         return format_diff_stylish(diff)
     elif formatter == 'plain':

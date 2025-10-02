@@ -3,7 +3,6 @@
 Makefile
 README.md
 coverage.xml
-demo.cast
 pyproject.toml
 requirements-dev.txt
 requirements.txt
@@ -15,6 +14,7 @@ uv.lock
 gendiff/__init__
 gendiff/formatters/__init__
 gendiff/formatters/format.py
+gendiff/formatters/json.py
 gendiff/formatters/plain.py
 gendiff/formatters/stylish.py
 gendiff/scripts/__init__

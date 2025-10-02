@@ -12,11 +12,13 @@ def format_value(value):
 
 
 def is_dict(value):
-    """Checks if a value is a dictionary"""
+    """Checks if a value is a dictionary."""
     return True if isinstance(value, dict) else False
 
 
 def format_dict(key, val):
+    """Formats key-value pairs into a string representation,
+    including nested dictionaries."""
     if not is_dict(val):
         return f'{key}: {format_value(val)}'
     else:
@@ -28,23 +30,25 @@ def format_dict(key, val):
         return '\n'.join(lines)
 
 
-def format_lines(diff):
+def format_lines(diff: list):
+    """Creates a comparison string from a dictionary."""
     def inner(diff):
         lines = []
-        keys = sorted(list(diff.keys()))
-        for key in keys:
-            if diff[key]['action'] == 'deleted':
-                lines.append('- ' + format_dict(diff[key]['name'], diff[key]['old_value']))
-            elif diff[key]['action'] == 'added':
-                lines.append('+ ' + format_dict(diff[key]['name'], diff[key]['new_value']))
-            elif diff[key]['action'] == 'changed':
-                lines.append('- ' + format_dict(diff[key]['name'], diff[key]['old_value']))
-                lines.append('+ ' + format_dict(diff[key]['name'], diff[key]['new_value']))
-            elif diff[key]['action'] == 'unchanged':
-                lines.append('  ' + format_dict(diff[key]['name'], diff[key]['value']))
-            elif diff[key]['action'] == 'nested':
-                lines.append('  ' + f"{diff[key]['name']}: {{")
-                nested = inner(diff[key]['children'])
+        dicts = sorted(diff, key=lambda item: item['name'])
+        for item in dicts:
+            name = item['name']
+            if item['action'] == 'deleted':
+                lines.append('- ' + format_dict(name, item['old_value']))
+            elif item['action'] == 'added':
+                lines.append('+ ' + format_dict(name, item['new_value']))
+            elif item['action'] == 'changed':
+                lines.append('- ' + format_dict(name, item['old_value']))
+                lines.append('+ ' + format_dict(name, item['new_value']))
+            elif item['action'] == 'unchanged':
+                lines.append('  ' + format_dict(name, item['value']))
+            elif item['action'] == 'nested':
+                lines.append('  ' + f"{name}: {{")
+                nested = inner(item['children'])
                 lines.append(nested)
                 lines.append('}')
         return '\n'.join(lines)
@@ -52,11 +56,11 @@ def format_lines(diff):
 
 
 def make_indent(diff_str):
-    """Adds indentation to the diff line"""
+    """Adds indentations to the diff line."""
     lines = diff_str.split('\n')
     formatted_lines = []
     current_indent = 0
-    symbols = ('+ ', '- ', '  ')   
+    symbols = ('+ ', '- ', '  ')
     for line in lines:
         stripped = line.strip()
         if stripped.endswith(':'):
@@ -79,5 +83,6 @@ def make_indent(diff_str):
 
 
 def format_diff_stylish(diff):
+    """Generates a diff display in 'stylish' format."""
     diff_lines = format_lines(diff)
     return make_indent(diff_lines)
