@@ -5,17 +5,17 @@ from gendiff.formatters.stylish import format_value
 
 @pytest.fixture
 def json_file1():
-    return 'tests/fixtures/file1.json'
+    return 'tests/tests_data/file1.json'
 
 
 @pytest.fixture
 def json_file2():
-    return 'tests/fixtures/file2.json'
+    return 'tests/tests_data/file2.json'
 
 
 @pytest.fixture
 def json_empty():
-    return 'tests/fixtures/empty.json'
+    return 'tests/tests_data/empty.json'
 
 
 def test_json_generate_diff(json_file1, json_file2):
@@ -30,17 +30,17 @@ def test_empty_json_generate_diff(json_empty, json_file2):
 
 @pytest.fixture
 def yaml_file1():
-    return 'tests/fixtures/file1.yml'
+    return 'tests/tests_data/file1.yml'
 
 
 @pytest.fixture
 def yaml_file2():
-    return 'tests/fixtures/file2.yml'
+    return 'tests/tests_data/file2.yml'
 
 
 @pytest.fixture
 def yaml_empty():
-    return 'tests/fixtures/empty.yml'
+    return 'tests/tests_data/empty.yml'
 
 
 def test_yaml_generate_diff(yaml_file1, yaml_file2):
@@ -55,12 +55,12 @@ def test_empty_yaml_generate_diff(yaml_file1, yaml_empty):
 
 @pytest.fixture
 def json_file21():
-    return 'tests/fixtures/file21.json'
+    return 'tests/tests_data/file21.json'
 
 
 @pytest.fixture
 def json_file22():
-    return 'tests/fixtures/file22.json'
+    return 'tests/tests_data/file22.json'
 
 
 def test_json_generate_diff_nested(json_file21, json_file22):
