@@ -7,6 +7,8 @@ def format_value(value):
         return str(value).lower()
     elif value is None:
         return 'null'
+    elif isinstance(value, (int, float)):
+        return str(value)
     elif is_dict(value):
         return '[complex value]'
     else:
