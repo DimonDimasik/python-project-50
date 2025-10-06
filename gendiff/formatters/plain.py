@@ -9,6 +9,8 @@ def format_value(value):
         return 'null'
     elif isinstance(value, (int, float)):
         return str(value)
+    elif value in ('True', 'true', 'False' 'false'):
+        return value.lower()
     elif is_dict(value):
         return '[complex value]'
     else:
@@ -25,9 +27,9 @@ def format_added_lines(property: str, value):
     return f"Property '{property}' was added with value: {value}"
 
 
-def format_changed_lines(property: str, old_value, new_value):
+def format_changed_lines(property: str, old_val, new_val):
     """Generates a line with data for the changed property."""
-    return f"Property '{property}' was updated. From {old_value} to {new_value}"
+    return f"Property '{property}' was updated. From {old_val} to {new_val}"
 
 
 def format_diff_plain(diff: list):
