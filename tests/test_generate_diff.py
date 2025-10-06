@@ -69,17 +69,26 @@ def json_file22():
 
 
 def test_json_generate_diff_nested(json_file21, json_file22):
-    expected = ('{\n    common: {\n      + follow: false\n        setting1: Value 1\n'
-                    '      - setting2: 200\n      - setting3: true\n      + setting3: null\n'
+    expected = ('{\n    common: {\n      + follow: false\n'
+                '        setting1: Value 1\n'
+                    '      - setting2: 200\n      - setting3: true\n'
+                    '      + setting3: null\n'
                     '      + setting4: blah blah\n      + setting5: {\n'
                     '            key5: value5\n        }\n        setting6: {\n'
-                    '            doge: {\n              - wow: \n              + wow: so much\n'
-                    '            }\n            key: value\n          + ops: vops\n        }\n'
-                    '    }\n    group1: {\n      - baz: bas\n      + baz: bars\n        foo: bar\n'
-                    '      - nest: {\n            key: value\n        }\n      + nest: str\n'
+                    '            doge: {\n              - wow: \n'
+                    '              + wow: so much\n'
+                    '            }\n            key: value\n          + ops: vops\n'
+                    '        }\n'
+                    '    }\n    group1: {\n      - baz: bas\n      + baz: bars\n'
+                    '        foo: bar\n'
+                    '      - nest: {\n            key: value\n        }\n'
+                    '      + nest: str\n'
                     '    }\n  - group2: {\n        abc: 12345\n        deep: {\n'
-                    '            id: 45\n        }\n    }\n  + group3: {\n        deep: {\n'
-                    '            id: {\n                number: 45\n            }\n        }\n'
+                    '            id: 45\n        }\n    }\n  + group3: {\n'
+                    '        deep: {\n'
+                    '            id: {\n                number: 45\n'
+                    '            }\n'
+                    '        }\n'
                     '        fee: 100500\n    }\n}')
     assert generate_diff(json_file21, json_file22) == expected
 
@@ -106,13 +115,21 @@ def test_generate_diff_plain(json_file21, json_file22):
 
 
 def test_generate_diff_json(json_file1, json_file2):
-    expected = ("[\n    {\n        \"action\": \"deleted\",\n        \"name\": \"follow\",\n"
-                "        \"old_value\": false\n    },\n    {\n        \"action\": \"unchanged\",\n"
-                "        \"name\": \"host\",\n        \"value\": \"hexlet.io\"\n    },\n    {\n"
-                "        \"action\": \"deleted\",\n        \"name\": \"proxy\",\n"
-                "        \"old_value\": \"123.234.53.22\"\n    },\n    {\n"
-                "        \"action\": \"changed\",\n        \"name\": \"timeout\",\n"
-                "        \"old_value\": 50,\n        \"new_value\": 20\n    },\n    {\n"
-                "        \"action\": \"added\",\n        \"name\": \"verbose\",\n"
+    expected = ("[\n    {\n        \"action\": \"deleted\",\n"
+                "        \"name\": \"follow\",\n"
+                "        \"old_value\": false\n    },\n    {\n"
+                "        \"action\": \"unchanged\",\n"
+                "        \"name\": \"host\",\n"
+                "        \"value\": \"hexlet.io\"\n    },\n    {\n"
+                "        \"action\": \"deleted\",\n"
+                "        \"name\": \"proxy\",\n"
+                "        \"old_value\": \"123.234.53.22\"\n"
+                "    },\n    {\n"
+                "        \"action\": \"changed\",\n"
+                "        \"name\": \"timeout\",\n"
+                "        \"old_value\": 50,\n        \"new_value\": 20\n"
+                "    },\n    {\n"
+                "        \"action\": \"added\",\n"
+                "        \"name\": \"verbose\",\n"
                 "        \"new_value\": true\n    }\n]")
     assert generate_diff(json_file1, json_file2, 'json') == expected
