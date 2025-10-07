@@ -1,6 +1,7 @@
 import pytest
-from gendiff.scripts.generate_diff import generate_diff
+
 from gendiff.formatters.stylish import format_value
+from gendiff.scripts.generate_diff import generate_diff
 
 
 @pytest.fixture

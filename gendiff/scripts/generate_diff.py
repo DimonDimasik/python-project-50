@@ -1,5 +1,7 @@
 import json
+
 import yaml
+
 from gendiff.formatters.format import choose_formatter
 from gendiff.formatters.stylish import is_dict
 
