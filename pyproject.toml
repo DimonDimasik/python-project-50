@@ -9,7 +9,7 @@ readme = "README.md"
 requires-python = ">=3.10,<3.11"
 dependencies = [
     "pyyaml>=6.0.2,<7.0.0",
-    "ruff>=0.13.3",
+    "ruff>=0.9.7",
 ]
 
 [project.scripts]
@@ -17,7 +17,6 @@ gendiff = "gendiff.scripts.gendiff:main"
 
 [project.optional-dependencies]
 dev = [
-    "flake8>=7.1.1,<8.0.0",
     "pytest>=8.3.3,<9.0.0",
     "pytest-cov>=4.1.0,<5.0.0",
     "coverage>=7.3.2,<8.0.0"
