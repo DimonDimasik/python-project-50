@@ -32,6 +32,19 @@ def format_changed_lines(property: str, old_val, new_val):
     return f"Property '{property}' was updated. From {old_val} to {new_val}"
 
 
+def choose_action(path: str, data: dict):
+    """Select and format the appropriate action based on the action type."""
+    if data['action'] == 'deleted':
+        return format_deleted_lines(path)
+    elif data['action'] == 'added':
+        new_val = format_value(data['new_value'])
+        return format_added_lines(path, new_val)
+    elif data['action'] == 'changed':
+        old_val = format_value(data['old_value'])
+        new_val = format_value(data['new_value'])
+        return format_changed_lines(path, old_val, new_val)
+
+
 def format_diff_plain(diff: list):
     """Generates a diff display in 'plain' format."""
     def inner(diff_nodes, current_path):
@@ -40,24 +53,12 @@ def format_diff_plain(diff: list):
         for item in diff_nodes:
             path = item['name']
             nodes.append(path)
-            if item['action'] == 'deleted':
-                lines.append(format_deleted_lines('.'.join(nodes)))
+            node = '.'.join(nodes)
+            if item['action'] == 'unchanged':
                 if nodes != []:
                     nodes.pop()
-            elif item['action'] == 'added':
-                node = '.'.join(nodes)
-                new_val = format_value(item['new_value'])
-                lines.append(format_added_lines(node, new_val))
-                if nodes != []:
-                    nodes.pop()
-            elif item['action'] == 'changed':
-                node = '.'.join(nodes)
-                old_val = format_value(item['old_value'])
-                new_val = format_value(item['new_value'])
-                lines.append(format_changed_lines(node, old_val, new_val))
-                if nodes != []:
-                    nodes.pop()
-            elif item['action'] == 'unchanged':
+            elif item['action'] != 'nested':
+                lines.append(choose_action(node, item))
                 if nodes != []:
                     nodes.pop()
             elif item['action'] == 'nested':
