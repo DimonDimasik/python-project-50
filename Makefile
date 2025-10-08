@@ -1,7 +1,7 @@
 .PHONY: install dev-install build publish package-install lint test coverage
 
 install:
-	uv pip install -e .
+	uv sync
 
 dev-install:
 	uv pip install -e ".[dev]"
@@ -13,10 +13,10 @@ publish:
 	uv publish --dry-run
 
 package-install: build
-	python3 -m pip install --user dist/*.whl
+	uv tool install dist/*.whl
 
 lint: dev-install
-	uv run flake8 gendiff
+	uv run ruff check
 
 test: dev-install
 	uv run pytest --cov=gendiff --cov-report=xml --cov-report=term tests/
