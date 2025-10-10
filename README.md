@@ -32,7 +32,7 @@
 
 ### The difference calculator finds differences between two files in json or yaml format and displays the result using different presentation formats.
 
-## How to install
+## How to install and run
 1) **Clone the repository:**
 * git clone https://github.com/DimonDimasik/python-project-50.git
 2) **Install uv (if not installed):**
@@ -41,6 +41,8 @@
 * powershell -c "irm https://astral.sh/uv/install.ps1 | iex" (Windows)
 3) **Сomplete the installation:**
 * make install
+4) **Run**
+* uv run gendiff path_to_first_file path_to_second_file - f 'format_name'
 ---
 
 ### Example of gendiff (json):
