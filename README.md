@@ -41,6 +41,7 @@
 * powershell -c "irm https://astral.sh/uv/install.ps1 | iex" (Windows)
 3) Сomplete the installation:
 * make install
+---
 
 ### Example of gendiff (json):
 [![asciicast](https://asciinema.org/a/RuSg4K1nqHjojE4RdJHIoA4p0.svg)](https://asciinema.org/a/RuSg4K1nqHjojE4RdJHIoA4p0)
