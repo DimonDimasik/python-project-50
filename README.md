@@ -20,9 +20,27 @@
 
 <!-- HTML for MD, CSS -->
 
+## Dependenceis:
+* python = "^3.10"
+* pyyaml = "^6.0.2"
+* ruff = "^0.9.7"
 
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/DimonDimasik/python-project-50/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/DimonDimasik/python-project-50/actions)
+
+# Difference calculator
+
+### The difference calculator finds differences between two files in json or yaml format and displays the result using different presentation formats.
+
+## How to install
+1) Clone the repository: 
+* git clone https://github.com/DimonDimasik/python-project-50.git
+2) Install uv (if not installed):
+* curl -LsSf https://astral.sh/uv/install.sh | sh (Linux/macOS)
+* pip install uv (Linux/macOS with pip)
+* powershell -c "irm https://astral.sh/uv/install.ps1 | iex" (Windows)
+3) Сomplete the installation:
+* make install
 
 ### Example of gendiff (json):
 [![asciicast](https://asciinema.org/a/RuSg4K1nqHjojE4RdJHIoA4p0.svg)](https://asciinema.org/a/RuSg4K1nqHjojE4RdJHIoA4p0)
