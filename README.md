@@ -1,20 +1,12 @@
 
 <div style="display: flex; justify-content: space-between; align-items: center;">
 
-<!-- Quality Gate -->
-<a href="https://sonarcloud.io/summary/new_code?id=DimonDimasik_python-project-50">
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=DimonDimasik_python-project-50&metric=alert_status" alt="Quality Gate" />
-</a>
-
-<!-- Coverage -->
-<a href="https://sonarcloud.io/summary/new_code?id=DimonDimasik_python-project-50">
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=DimonDimasik_python-project-50&metric=coverage" alt="Coverage" />
-</a>
-
-<!-- Bugs -->
-<a href="https://sonarcloud.io/summary/new_code?id=DimonDimasik_python-project-50">
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=DimonDimasik_python-project-50&metric=bugs" alt="Bugs" />
-</a>
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=DimonDimasik_python-project-50&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DimonDimasik_python-project-50)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DimonDimasik_python-project-50&metric=coverage)](https://sonarcloud.io/summary/new_code?id=DimonDimasik_python-project-50)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=DimonDimasik_python-project-50&metric=bugs)](https://sonarcloud.io/summary/new_code?id=DimonDimasik_python-project-50)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=DimonDimasik_python-project-50&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=DimonDimasik_python-project-50)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=DimonDimasik_python-project-50&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=DimonDimasik_python-project-50)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=DimonDimasik_python-project-50&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=DimonDimasik_python-project-50)
 
 </div>
 
